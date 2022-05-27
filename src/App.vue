@@ -40,8 +40,10 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang='scss'>
+	@import '@/scss/_fonts';
 	.app{
+		font-family: 'Roboto', Arial, sans-serif;
 		padding: 30px;
 		width: 580px;
 		background-color: $basic-white;

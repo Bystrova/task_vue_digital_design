@@ -19,7 +19,6 @@
 	}
 </script>
 
-
 <style lang='scss'>
 	.input {
 		&-label {
@@ -64,13 +63,15 @@
 
 			&::after {
 				position: absolute;
-				content: '\2169';
+				// content: '\2169';
+				content: '';
 				width: 12px;
 				height: 13px;
 				font-weight: bold;
 				top: 50%;
+				left: 11px;
 				transform: translateY(-50%);
-				left: 13px;
+				background: url('../assets/images/x.svg') no-repeat;
 			}
 		}
 
