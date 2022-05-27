@@ -8,7 +8,14 @@
 			@toggle='classToggle'
 			v-click-outside='closeSelect'
 		/>
-		<Select :class="{'dropdown-wrapper-show': isActive}"></Select>
+		<Select :class="{'dropdown-wrapper-show': isActive}">
+			<Checkbox 
+				v-for='item in arr' 
+				:text='item' 
+				:key='arr.indexOf(item)' 
+				:id='item'
+			></Checkbox>
+		</Select>
 	</div>
 </template>
 
@@ -18,6 +25,12 @@ export default {
 	data() {
 		return {
 			isActive: false,
+		}
+	},
+
+	props: {
+		'arr': {
+			type: Array
 		}
 	},
 

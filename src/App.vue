@@ -18,7 +18,12 @@
 		<div class='wrap'>
 			<Paging></Paging>
 		</div>
-		<Dropdown></Dropdown>
+		<div class='wrap-flex'>
+			<Dropdown :arr='arr'>
+			</Dropdown>
+			<Dropdown :arr='arr2'>
+			</Dropdown>
+		</div>
 	</div>
 </template>
 
@@ -27,6 +32,8 @@
 export default {
 	data() {
 		return {
+			arr: ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6', 'Item 7', 'Item 8'],
+			arr2: ['Item 9', 'Item 10', 'Item 11', 'Item 12']
 		}
 	},
 
@@ -52,5 +59,10 @@ export default {
 
 	.wrap {
 		margin-bottom: 20px;
+	}
+
+	.wrap-flex {
+		display: flex;
+		gap: 20px;
 	}
 </style>

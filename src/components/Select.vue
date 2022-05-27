@@ -1,12 +1,13 @@
 <template>
 	<div class='dropdown-wrapper' :class='additionalClass'>
 		<div class='input-list'>
-			<Checkbox 
+			<!-- <Checkbox 
 				v-for='item in arr' 
 				:text='item' 
 				:key='arr.indexOf(item)' 
 				:id='item'
-			></Checkbox>
+			></Checkbox> -->
+			<slot></slot>
 		</div>
 	</div>
 </template>
@@ -16,7 +17,7 @@
 export default {
 	data() {
 		return {
-			arr: ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6', 'Item 7', 'Item 8']
+			// arr: ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6', 'Item 7', 'Item 8']
 		}
 	},
 
