@@ -1,23 +1,14 @@
 <template>
-	<textarea class='text-field' :placeholder='placeholder' :disabled='disabled'></textarea>
+	<textarea class='text-field' v-on='$listeners'></textarea>
 </template>
 
 <script>
 
 export default {
-	props: {
-			'placeholder': {
-				type: String
-			},
-
-			'disabled': {
-				type: Boolean
-			}
-		}
 }
 </script>
 
-<style lang='scss'>
+<style lang='scss' scoped>
 	.text-field {
 	@include input-style;
 

@@ -1,25 +1,36 @@
 <template>
-	<div>
-		<input class='input-checkbox visually-hidden' type='checkbox' :id='id'>
-		<label class='input-label' :for='id'>{{text}}</label>
-	</div>
+	<label>
+		<input class='input-checkbox visually-hidden' type='checkbox' :value='value' v-on='$listeners'>
+		<span class='input-label'>{{text}}</span>
+	</label>
 </template>
 
 <script>
 	export default {
+		data(){
+			return {
+			}
+		},
+
 		props: {
 			'text': {
 				type: String
 			},
 
-			'id': {
+			'value': {
 				type: String
 			}
 		},
+
+		methods: {
+			change(){
+				this.$emit('change')
+			}
+		}
 	}
 </script>
 
-<style lang='scss'>
+<style lang='scss' scoped>
 	.input {
 		&-label {
 			position: relative;

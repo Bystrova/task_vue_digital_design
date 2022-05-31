@@ -1,47 +1,27 @@
 <template>
 	<button 
 		class='btn' 
-		:class='additionalClass' 
-		:disabled='disabled'
-		@click='toggle'
+		v-on='$listeners'
 		>{{text}}</button>
 </template>
 
 <script>
 	export default {
-		data() {
-			return {
-
-			}
-		},
-
 		props: {
 			'text': {
 				type: String
 			},
-			'additionalClass': {
-				type: String
-			},
-			'disabled': {
-				type: Boolean
-			}
 		},
-
-		methods: {
-			toggle(evt){
-				this.$emit('toggle', evt.target.value)
-			},
-		}
 	}
 </script>
 
-<style lang='scss'>
+<style lang='scss' scoped>
 	.btn {
 		padding: 2px 20px 1px;
 		border: 1px solid transparent;
 		border-radius: 5px;
-		font-family: inherit;
-		font-size: inherit;
+		font-family: $main-font;
+		font-size: 16px;
 		cursor: pointer;
 		background-color: $default;
 

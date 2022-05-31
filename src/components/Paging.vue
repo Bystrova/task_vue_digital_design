@@ -2,9 +2,9 @@
 	<div class='pagination'>
 		<Button 
 			class='btn-pagination' 
-			:disabled='activePage===0'
+			:disabled='isFirstBtn'
 			text='Назад'
-			@toggle='getBack'
+			@click='getBack'
 			></Button>
 		<Button 
 			class='btn-pagination' 
@@ -12,14 +12,14 @@
 			v-text='item+1' 
 			:value='item' 
 			:key='item'
-			v-for='item in arr' 
-			@toggle='getActivePage'
+			v-for='item in getArr' 	
+			@click='setActivePage'
 			></Button>
 		<Button 
 			class='btn-pagination' 
-			:disabled='activePage===arr.length-1'
+			:disabled='isLastBtn'
 			text='Вперед'
-			@toggle='getForward'
+			@click='getForward'
 			></Button>
 	</div>
 </template>
@@ -28,28 +28,54 @@
 	export default {
 		data(){
 			return {
-				arr: [0, 1, 2, 3],
+				arr: [],
 				activePage: 0,
 			}
 		},
 
+		props: {
+			'total': {
+				type: Number
+			},
+
+			'limit': {
+				type: Number
+			}
+		},
+
 		methods: {
-			getActivePage(data){
-				this.activePage = Number(data)
+			setActivePage(evt){
+				this.activePage = Number(evt.target.value)
 			},
 
 			getBack(){
-			this.activePage -=1
+				this.activePage -=1
 			},
 
 			getForward(){
 				this.activePage +=1
 			}
+		},
+
+		computed: {
+			isFirstBtn(){
+				return this.activePage === 0;
+			},
+
+			isLastBtn(){
+				return this.activePage === this.arr.length-1
+			},
+
+			getArr(){
+				const btnQuantity = Math.ceil(this.total / this.limit);
+				const emptyArr = new Array(btnQuantity);
+				return this.arr = [...emptyArr.keys()];
+			}
 		}
 	}
 </script>
 
-<style lang='scss'>
+<style lang='scss' scoped>
 	.pagination {
 		display: flex;
 		align-items: center;
