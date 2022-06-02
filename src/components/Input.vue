@@ -1,11 +1,8 @@
 <template>
 	<input 
 		class='form-input' 
-		:class='additionalClass'
-		:placeholder='placeholder' 
-		:disabled='disabled' 
-		:readonly='readonly'
-		@click='toggle'
+		v-on='$listeners'
+		:value='value'
 	>
 </template>
 
@@ -13,33 +10,16 @@
 
 export default {
 	props: {
-		'placeholder': {
-			type: String
-		},
-
-		'disabled': {
-			type: Boolean
-		},
-
-		'readonly': {
-			type: Boolean
-		},
-
-		'additionalClass': {
+		'value': {
 			type: String
 		}
 	},
 
-	methods: {
-		toggle(){
-			this.$emit('toggle')
-		},
-	}
 }
 </script>
 
 
-<style lang='scss'>
+<style lang='scss' scoped>
 	.form-input {
 		@include input-style;
 		padding: 3px 10px;
