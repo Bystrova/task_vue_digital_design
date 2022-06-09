@@ -1,15 +1,32 @@
 <template>
-	<textarea class='text-field' v-on='$listeners'></textarea>
+	<textarea class="text-field" v-model="setInputVal"></textarea>
 </template>
 
 <script>
-
 export default {
-}
+	data() {
+		return {};
+	},
+
+	props: {
+		text: String,
+	},
+
+	computed: {
+		setInputVal: {
+			get() {
+				return this.text;
+			},
+			set(newVal) {
+				this.$emit('input', newVal);
+			},
+		},
+	},
+};
 </script>
 
-<style lang='scss' scoped>
-	.text-field {
+<style lang="scss" scoped>
+.text-field {
 	@include input-style;
 
 	height: 76px;

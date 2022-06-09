@@ -56,7 +56,7 @@
   "keywords": [],
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.27.2",
     "include-media": "^1.4.9",
     "lodash": "^4.17.11",
     "qs": "^6.5.1",

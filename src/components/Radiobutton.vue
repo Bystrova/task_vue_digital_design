@@ -1,11 +1,12 @@
 <template>
 	<label>
 		<input
-			class="input-checkbox visually-hidden"
+			class="input-radio visually-hidden"
+			type="radio"
 			v-model="change"
-			:value="value"
 			v-bind="$attrs"
-			type="checkbox"
+			:value="value"
+			@click="toggle"
 		/>
 		<span class="input-label">{{ text }}</span>
 	</label>
@@ -18,17 +19,24 @@ export default {
 	props: {
 		text: String,
 		value: String,
-		checkedItems: Array,
+		checkedVal: String,
 	},
 
 	computed: {
 		change: {
 			get() {
-				return this.checkedItems;
+				return this.checkedVal;
 			},
-			set(newArr) {
-				this.$emit('change', newArr);
+
+			set(newVal) {
+				this.$emit('change', newVal);
 			},
+		},
+	},
+
+	methods: {
+		toggle() {
+			this.$emit('click');
 		},
 	},
 };
@@ -67,7 +75,7 @@ export default {
 		}
 	}
 
-	&-checkbox:checked + &-label {
+	&-radio:checked + &-label {
 		background-color: $primary;
 		color: $default;
 
@@ -78,7 +86,6 @@ export default {
 
 		&::after {
 			position: absolute;
-			// content: '\2169';
 			content: '';
 			width: 12px;
 			height: 13px;
@@ -90,7 +97,7 @@ export default {
 		}
 	}
 
-	&-checkbox:disabled + &-label {
+	&-radio:disabled + &-label {
 		color: $label-text;
 		background-color: $inner-shadow;
 

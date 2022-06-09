@@ -26,25 +26,25 @@ const router = () => {
 			},
 
 			{
-				path: '/task/:id',
+				path: '/tasks/task/:id',
 				name: 'TaskView',
 				component: TaskView,
 				props: true,
 			},
 
 			{
-				path: '/task/edit',
-				name: 'TaskAdd',
+				path: '/tasks/edit/:id?',
+				name: 'TaskEdit',
 				component: TaskAddOrEdit,
 				props: true,
-				children: [
-					{
-						path: ':id',
-						name: 'TaskEdit',
-						component: TaskAddOrEdit,
-						props: true,
-					}
-				]
+				// children: [
+				// 	{
+				// 		path: ':id',
+				// 		name: 'TaskEdit',
+				// 		component: TaskAddOrEdit,
+				// 		props: true,
+				// 	}
+				// ]
 			},
 			
 			{

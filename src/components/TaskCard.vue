@@ -1,52 +1,172 @@
 <template>
-	<section class='card'>
-		<div class='card-info'>
-			<dl class='card-info-list'>
-				<dt class='label-text'>Исполнитель</dt>
-				<dd class='text'>Assigned user name</dd>
-				<dt class='label-text'>Автор задачи</dt>
-				<dd class='text'>User name</dd>
-				<dt class='label-text'>Тип запроса</dt>
-				<dd class='text'>Type</dd>
-				<dt class='label-text'>Приоритет</dt>
-				<dd class='text'>Rank</dd>
-				<dt class='label-text'>Дата создания</dt>
-				<dd class='text'>dd.mm.yy hh.mm</dd>
-				<dt class='label-text'>Дата изменения</dt>
-				<dd class='text'>dd.mm.yy hh.mm</dd>
-				<dt class='label-text'>Затрачено времени</dt>
-				<dd class='text'>0 hours 0 minutes</dd>
+	<section class="card">
+		<div class="card-info">
+			<dl class="card-info-list">
+				<dt class="label-text">Исполнитель</dt>
+				<dd class="text">
+					{{ assignedUsername }}
+				</dd>
+				<dt class="label-text">Автор задачи</dt>
+				<dd class="text">{{ authorUsername }}</dd>
+				<dt class="label-text">Тип запроса</dt>
+				<dd class="text">{{ Types[type] }}</dd>
+				<dt class="label-text">Приоритет</dt>
+				<dd class="text">{{ Ranks[rank] }}</dd>
+				<dt class="label-text">Дата создания</dt>
+				<dd class="text">{{ dateAndTime(dateOfCreation) }}</dd>
+				<dt class="label-text">Дата изменения</dt>
+				<dd class="text">{{ dateAndTime(dateOfUpdate) }}</dd>
+				<dt class="label-text">Затрачено времени</dt>
+				<dd class="text">{{ getHoursAndMinutes(timeInMinutes) }}</dd>
 			</dl>
-			<Button class='btn-primary' text='Сделать запись о работе'></Button>
+			<Button
+				class="btn-primary"
+				text="Сделать запись о работе"
+				@click="modalToggle"
+			></Button>
 		</div>
-		<div class='card-description'>
-			<span class='label-text'>Описание</span>
-			<p class='card-description-text'>Task description</p>
+		<div class="card-description">
+			<span class="label-text">Описание</span>
+			<p class="card-description-text">{{ description }}</p>
 		</div>
-		<div class='card-comment'>
-			<form>
-				<span class='label-text'>Комментарии (0)</span>
-				<Textarea placeholder='Текст комментария'></Textarea>
-				<Button class='btn-success' text='Добавить комментарий'></Button>
+		<div class="card-comment">
+			<form @submit.prevent="submit">
+				<span class="label-text">Комментарии ({{ comments.length }})</span>
+				<Textarea
+					placeholder="Текст комментария"
+					@input="setText"
+					required
+				></Textarea>
+				<Button class="btn-success" text="Добавить комментарий"></Button>
 			</form>
-			<dl class='comment-list'>
-				<dt>User name</dt>
-				<dd>User comment</dd>
-				<dt>User name</dt>
-				<dd>User comment</dd>
-			</dl>
+			<div class="comment-list comment-indent">
+				<Comment
+					v-for="item in reverseComments"
+					:key="item.id"
+					v-bind="{ ...item }"
+				></Comment>
+			</div>
 		</div>
+		<Modal></Modal>
 	</section>
 </template>
 
 <script>
-
+import { Ranks, Types } from '../common/const';
+import { mapActions, mapGetters } from 'vuex';
 export default {
+	data() {
+		return {
+			Ranks: Ranks,
+			Types: Types,
+			hoursDeclinations: ['час', 'часа', 'часов'],
+			minutesDeclinations: ['минута', 'минуты', 'минут'],
+			commentText: '',
+			MSK: 3,
+			isModalActive: false,
+		};
+	},
 
-}
+	props: {
+		assignedId: String,
+		dateOfCreation: String,
+		dateOfUpdate: String,
+		description: String,
+		id: String,
+		rank: String,
+		status: String,
+		timeInMinutes: Number,
+		type: String,
+		userId: String,
+	},
+
+	computed: {
+		...mapGetters(['allUsers', 'comments']),
+		assignedUsername() {
+			let assignedUsername = '';
+			const assignedUser = this.allUsers.find(
+				(user) => user.id === this.assignedId
+			);
+			if (!!assignedUser) {
+				assignedUsername = assignedUser.username;
+			}
+			return assignedUsername;
+		},
+
+		authorUsername() {
+			let authorUsername = '';
+			const authorUser = this.allUsers.find((user) => user.id === this.userId);
+			if (!!authorUser) {
+				authorUsername = authorUser.username;
+			}
+			return authorUsername;
+		},
+
+		reverseComments() {
+			return this.comments.reverse();
+		},
+	},
+
+	methods: {
+		...mapActions(['addComment', 'fetchComments']),
+
+		dateAndTime(val) {
+			let dateAndTime = '';
+			if (!!val) {
+				const date = val.slice(0, 10).split('-').reverse().join('.');
+				const hh = Number(val.slice(11, 13)) + this.MSK;
+				const mm = val.slice(13, 16);
+				dateAndTime = `${date} ${hh}${mm}`;
+			}
+			return dateAndTime;
+		},
+
+		getDeclination(value, declinationsArr) {
+			let valueDeclination = '';
+			if (value % 10 === 1 && value % 100 !== 11) {
+				valueDeclination = declinationsArr[0];
+			} else if (
+				value % 10 >= 2 &&
+				value % 10 <= 4 &&
+				(value % 100 > 14 || value % 100 < 12)
+			) {
+				valueDeclination = declinationsArr[1];
+			} else {
+				valueDeclination = declinationsArr[2];
+			}
+			return valueDeclination;
+		},
+
+		getHoursAndMinutes(mins) {
+			let hours = Math.trunc(mins / 60);
+			let minutes = mins % 60;
+			return `${hours} ${this.getDeclination(
+				hours,
+				this.hoursDeclinations
+			)} ${minutes} ${this.getDeclination(minutes, this.minutesDeclinations)}`;
+		},
+
+		setText(text) {
+			this.commentText = text;
+		},
+
+		submit(evt) {
+			this.addComment({
+				taskId: this.id,
+				userId: '6273dd46d09b551dca8762a9', // временно, пока нет логина
+				text: this.commentText,
+			});
+			evt.target.reset();
+		},
+
+		modalToggle() {
+			this.isModalActive = !this.isModalActive;
+		},
+	},
+};
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .card {
 	display: flex;
 	height: 100%;
@@ -66,7 +186,8 @@ export default {
 		padding: 0 0 0 20px;
 
 		&-text {
-			max-height: calc(100% - 25px);
+			// max-height: calc(100% - 25px);
+			max-height: 580px;
 			padding: 0 20px 0 0;
 			margin: 0;
 
@@ -91,6 +212,15 @@ export default {
 	}
 }
 
+.comment-list {
+	max-height: 450px;
+	overflow: auto;
+	@include scroll-style;
+}
+
+.comment-indent {
+	margin-top: 13px;
+}
 .label-text {
 	color: $label-text;
 	margin-bottom: 5px;
