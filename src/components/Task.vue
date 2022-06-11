@@ -4,7 +4,7 @@
 			<span class="visually-hidden">Ошибка</span>
 		</span>
 		<span class="task-name">{{ title }}</span>
-		<span class="task-user">{{ assignedUsername }}</span>
+		<span class="task-user" v-if="!userPage">{{ assignedUsername }}</span>
 		<div class="task-wrap">
 			<Status :class="'task-status-' + status" :statusText="statuses[status]">
 			</Status>
@@ -13,7 +13,7 @@
 			<Icon width="14" height="8" :name="rank"></Icon>
 			<span>{{ ranks[rank] }}</span>
 		</div>
-		<div class="task-actions">
+		<div class="task-actions" v-if="!userPage">
 			<Dropdown>
 				<Button
 					class="btn-dropdown"
@@ -96,6 +96,7 @@ export default {
 		type: String,
 		status: String,
 		title: String,
+		userPage: Boolean,
 	},
 
 	computed: {

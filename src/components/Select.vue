@@ -34,6 +34,7 @@
 						:name="name"
 						@change="setValue"
 						@click="classToggle"
+						v-bind="$attrs"
 					></Radiobutton>
 				</div>
 			</div>

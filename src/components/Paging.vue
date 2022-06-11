@@ -31,6 +31,12 @@ export default {
 		};
 	},
 
+	watch: {
+		activePage() {
+			this.activeBtn = this.activePage;
+		},
+	},
+
 	props: {
 		total: Number,
 		limit: Number,
@@ -60,11 +66,15 @@ export default {
 		},
 
 		isLastBtn() {
-			return this.activeBtn === this.arr.length - 1;
+			return this.activeBtn === this.getArr.length - 1;
 		},
 
 		getArr() {
-			const btnQuantity = Math.ceil(this.total / this.limit);
+			let totalTasks = this.total;
+			if (!this.total) {
+				totalTasks = 1;
+			}
+			const btnQuantity = Math.ceil(totalTasks / this.limit);
 			const emptyArr = new Array(btnQuantity);
 			return (this.arr = [...emptyArr.keys()]);
 		},

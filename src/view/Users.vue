@@ -13,7 +13,7 @@
 					<Paging
 						:total="usersTotal"
 						:limit="usersFilter.limit"
-						:activePage="activePage"
+						:activePage="usersFilter.page"
 						@click="setPage"
 					></Paging>
 				</template>
@@ -26,35 +26,23 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 export default {
-	data() {
-		return {
-			activePage: 0,
-			usersFilter: {
-				filter: {
-					query: '',
-				},
-				page: 0,
-				limit: 9,
-			},
-		};
-	},
-
 	computed: {
-		...mapGetters(['users', 'usersTotal']),
+		...mapGetters(['users', 'usersTotal', 'usersFilter']),
 	},
 
-	watch: {
-		activePage() {
-			this.usersFilter.page = this.activePage;
-			this.fetchUsers(this.usersFilter);
-		},
-	},
+	// watch: {
+	// 	activePage() {
+	// 		this.usersFilter.page = this.activePage;
+	// 		this.fetchUsers(this.usersFilter);
+	// 	},
+	// },
 
 	methods: {
 		...mapActions(['fetchUsers']),
 
 		setPage(val) {
-			this.activePage = val;
+			this.usersFilter.page = val;
+			this.fetchUsers(this.usersFilter);
 		},
 	},
 

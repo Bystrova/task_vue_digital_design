@@ -13,7 +13,7 @@
 			<div class="filter-name">
 				<Input
 					placeholder="Название задачи"
-					@change="setTaskName"
+					@input="setTaskName"
 					:text="tasksFilter.filter.query"
 				></Input>
 			</div>

@@ -16,6 +16,7 @@ export default {
 	padding: 2px 10px;
 	font-size: 14px;
 	line-height: 16px;
+	white-space: nowrap;
 
 	&-opened {
 		background-color: $label-text;

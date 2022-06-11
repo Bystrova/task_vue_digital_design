@@ -3,6 +3,7 @@
 		<div class="label-text">
 			{{ getUsername }} ({{ dateAndTime(dateOfUpdate) }})
 			<Button
+				v-if="isAssignedUser"
 				class="btn btn-delete-comment"
 				type="button"
 				text="Удалить"
@@ -33,6 +34,10 @@ export default {
 				username = user.username;
 			}
 			return username;
+		},
+
+		isAssignedUser() {
+			return this.userId === localStorage.id;
 		},
 	},
 

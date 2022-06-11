@@ -57,15 +57,9 @@ export default {
 		...mapActions(['fetchTasks', 'fetchAllUsers']),
 
 		setPage(val) {
-			this.activePage = val;
-			this.tasksFilter.page = this.activePage;
+			this.tasksFilter.page = val;
 			this.fetchTasks();
 		},
-
-		// setFilter(obj) {
-		// 	this.tasksFilter.filter = obj;
-		// 	this.fetchTasks();
-		// },
 	},
 };
 </script>

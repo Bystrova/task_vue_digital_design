@@ -9,7 +9,7 @@ export default {
 	data() {
 		return {
 			linkToUser: {
-				name: 'User',
+				name: 'UserView',
 				params: {
 					id: this.user.id,
 				},

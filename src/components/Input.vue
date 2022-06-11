@@ -9,12 +9,6 @@
 
 <script>
 export default {
-	data() {
-		return {
-			// inputText: '',
-		};
-	},
-
 	props: {
 		text: String,
 	},
@@ -32,7 +26,7 @@ export default {
 
 	methods: {
 		change() {
-			this.$emit('change', this.inputText);
+			this.$emit('input', this.inputText);
 		},
 
 		click() {
@@ -46,7 +40,6 @@ export default {
 .form-input {
 	@include input-style;
 	padding: 3px 10px;
-	margin: 0 0 20px 0;
 	height: 24px;
 	-moz-appearance: textfield;
 
@@ -59,6 +52,10 @@ export default {
 	&:focus,
 	&:not(:placeholder-shown) {
 		padding: 2px 9px;
+	}
+
+	&-indent {
+		margin: 0 0 20px 0;
 	}
 
 	&-heading {

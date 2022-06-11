@@ -102,6 +102,13 @@ export default {
 			})
 		},
 
+		addWorktime: ({dispatch}, {id, data}) => {
+			api.Data.addWorktime(id, data)
+			.then(() => {
+				dispatch('fetchTask', id)
+			})
+		},
+
 		fetchComments: ({ commit, getters }) => {
 			api.Data.getComments(getters.task.id)
 			.then((res) => {

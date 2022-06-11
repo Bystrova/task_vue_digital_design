@@ -11,6 +11,7 @@
 						name="user"
 						:checkedVal="assignedUserId"
 						@change="setAssignedId"
+						required
 					></Select>
 				</dd>
 				<dt class="label-text">Тип запроса</dt>
@@ -22,6 +23,7 @@
 						name="type"
 						:checkedVal="type"
 						@change="setType"
+						required
 					></Select>
 				</dd>
 				<dt class="label-text">Приоритет</dt>
@@ -33,6 +35,7 @@
 						name="rank"
 						:checkedVal="rank"
 						@change="setRank"
+						required
 					></Select>
 				</dd>
 			</dl>
@@ -40,7 +43,13 @@
 		<div class="card-description">
 			<label>
 				<span class="label-text">Название</span>
-				<Input placeholder="Название задачи" :text="title" @change="setTitle" />
+				<Input
+					placeholder="Название задачи"
+					:text="title"
+					class="form-input-indent"
+					@input="setTitle"
+					required
+				/>
 			</label>
 			<label>
 				<span class="label-text">Описание</span>
@@ -49,6 +58,7 @@
 					placeholder="Описание задачи"
 					:text="description"
 					@input="setDescription"
+					required
 				></Textarea>
 			</label>
 		</div>
@@ -65,12 +75,13 @@ export default {
 			Types: Types,
 			taskData: {
 				id: this.id,
-				userId: '6273dd46d09b551dca8762a9', // временно, пока нет логина
+				userId: localStorage.id,
 				title: this.title,
 				description: this.description,
 				type: this.type,
 				rank: this.rank,
 				assignedId: this.assignedId,
+				// assignedId: localStorage.currentUser,
 			},
 		};
 	},
@@ -115,7 +126,7 @@ export default {
 	},
 
 	computed: {
-		...mapGetters(['allUsers']),
+		...mapGetters(['allUsers', 'user']),
 		usersObj() {
 			let usersObj = {};
 			this.allUsers.map((user) => (usersObj[user.id] = user.username));
@@ -123,11 +134,18 @@ export default {
 		},
 
 		assignedUserId() {
+			let assignedUser = '';
 			if (!!this.assignedId) {
-				return Object.keys(this.usersObj).find(
+				assignedUser = Object.keys(this.usersObj).find(
 					(key) => key === this.assignedId
 				);
+			} else if (!!localStorage.currentUser) {
+				assignedUser = Object.keys(this.usersObj).find(
+					(key) => key === localStorage.currentUser
+				);
+				this.taskData.assignedId = assignedUser;
 			}
+			return assignedUser;
 		},
 	},
 

@@ -28,4 +28,9 @@ export const StatusActions = {
 	toWork: 'Взять в работу',
 	toTesting: 'На тестирование',
 	done: 'Готово',
+};
+
+export const Units = {
+	minutes: 'Минуты',
+	hours: 'Часы'
 }

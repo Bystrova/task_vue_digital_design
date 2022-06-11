@@ -11,7 +11,7 @@
 							:statusText="Statuses[task.status]"
 						></Status>
 					</div>
-					<div>
+					<div class="buttons-wrap">
 						<Button
 							v-if="isOpened"
 							class="btn-default"
@@ -99,7 +99,7 @@ export default {
 
 		remove() {
 			this.deleteTask(this.task.id);
-			this.$router.push(this.goToTasks);
+			this.$router.go(-1);
 		},
 
 		newStatus(newVal) {
@@ -112,4 +112,11 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.buttons-wrap {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	flex-wrap: wrap;
+}
+</style>

@@ -11,6 +11,10 @@
 .logo {
 	display: block;
 
+	&-header {
+		width: 33%;
+	}
+
 	&-pic {
 		display: inherit;
 	}

@@ -1,20 +1,29 @@
 <template>
-	<form class="modal">
+	<form class="modal" @submit.prevent="submit">
 		<div class="modal-wrapper">
-			<h2 class="modal-heading">{modalHeading}</h2>
-			<div class="modal-inner"></div>
+			<h2 class="modal-heading">{{ title }}</h2>
+			<div class="modal-inner">
+				<slot name="inputs"></slot>
+			</div>
 			<div class="modal-buttons">
-				<button class="button button-primary" type="submit">
-					{buttonText}
-				</button>
-				<button class="button button-default" type="button">Отмена</button>
+				<slot name="buttons"></slot>
 			</div>
 		</div>
 	</form>
 </template>
 
 <script>
-export default {};
+export default {
+	props: {
+		title: String,
+	},
+
+	methods: {
+		submit() {
+			this.$emit('submit');
+		},
+	},
+};
 </script>
 
 <style lang="scss" scoped>
@@ -27,7 +36,7 @@ export default {};
 	height: 100vh;
 	justify-content: center;
 	align-items: center;
-	display: none;
+	display: flex;
 
 	&-active {
 		display: flex;
@@ -51,14 +60,17 @@ export default {};
 		padding: 20px 30px;
 		border-top: 1px solid $inner-shadow;
 		border-bottom: 1px solid $inner-shadow;
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
 	}
 
 	&-buttons {
 		padding: 20px 30px;
-
-		.button:first-child {
-			margin-right: 10px;
-		}
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		flex-wrap: wrap;
 	}
 
 	&-dropdown {

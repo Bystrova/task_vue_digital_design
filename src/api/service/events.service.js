@@ -1,6 +1,14 @@
 export default api => {
 	api.Data = {
 
+		getLogin(data){
+			return api.instance.request({
+				method: 'post',
+				url: 'users/login',
+				data
+			})
+		},
+
 		getTasks(data) {
 			return api.instance.request({
 				method: 'post',
@@ -38,6 +46,14 @@ export default api => {
 			})
 		},
 
+		addWorktime(id, data){
+			return api.instance.request({
+				method: 'patch',
+				url: `tasks/${id}/worktime`,
+				data
+			})
+		},
+
 		getAllUsers() {
 			return api.instance.request({
 				method: 'get',
@@ -49,6 +65,21 @@ export default api => {
 			return api.instance.request({
 				method: 'post',
 				url: 'users',
+				data
+			})
+		},
+
+		getUser(id){
+			return api.instance.request({
+				method: 'get',
+				url: `users/${id}`
+			})
+		},
+
+		editUser(data){
+			return api.instance.request({
+				method: 'put',
+				url: 'users/edit',
 				data
 			})
 		},
@@ -73,6 +104,13 @@ export default api => {
 				method: 'delete',
 				url: `comments/${id}`,
 			})
+		},
+
+		deleteMe(id) {
+			return api.instance.request({
+				method: 'delete',
+				url: `users/${id}`,
+			})
 		}
 	}
-}
+};

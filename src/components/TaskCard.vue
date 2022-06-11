@@ -47,26 +47,62 @@
 				></Comment>
 			</div>
 		</div>
-		<Modal></Modal>
+		<Modal v-if="isModalActive" title="Запись о работе" @submit="sendWorktime">
+			<template v-slot:inputs>
+				<label>
+					<span class="label-text">Затраченное время</span>
+					<Input
+						placeholder="Введите число"
+						type="number"
+						@input="setTime"
+						required
+					></Input>
+				</label>
+				<label>
+					<span class="label-text">Единица измерения</span>
+					<Select
+						placeholder="Выберите единицы измерения"
+						:obj="Units"
+						name="units"
+						@change="setUnit"
+						required
+					></Select>
+				</label>
+				<label>
+					<span class="label-text">Комментарий</span>
+					<Textarea placeholder="Введите текст" @input="setComment"></Textarea>
+				</label>
+			</template>
+			<template v-slot:buttons>
+				<Button class="btn-primary" text="Добавить"></Button>
+				<Button class="btn-default" text="Отмена" @click="modalToggle"></Button>
+			</template>
+		</Modal>
 	</section>
 </template>
 
 <script>
-import { Ranks, Types } from '../common/const';
+import { Ranks, Types, Units } from '../common/const';
 import { mapActions, mapGetters } from 'vuex';
+
 export default {
 	data() {
 		return {
 			Ranks: Ranks,
 			Types: Types,
+			Units: Units,
 			hoursDeclinations: ['час', 'часа', 'часов'],
 			minutesDeclinations: ['минута', 'минуты', 'минут'],
 			commentText: '',
 			MSK: 3,
 			isModalActive: false,
+			modalData: {
+				timeInMinutes: '',
+				comment: '',
+				currentUser: localStorage.id,
+			},
 		};
 	},
-
 	props: {
 		assignedId: String,
 		dateOfCreation: String,
@@ -79,7 +115,6 @@ export default {
 		type: String,
 		userId: String,
 	},
-
 	computed: {
 		...mapGetters(['allUsers', 'comments']),
 		assignedUsername() {
@@ -92,7 +127,6 @@ export default {
 			}
 			return assignedUsername;
 		},
-
 		authorUsername() {
 			let authorUsername = '';
 			const authorUser = this.allUsers.find((user) => user.id === this.userId);
@@ -101,15 +135,12 @@ export default {
 			}
 			return authorUsername;
 		},
-
 		reverseComments() {
 			return this.comments.reverse();
 		},
 	},
-
 	methods: {
-		...mapActions(['addComment', 'fetchComments']),
-
+		...mapActions(['addComment', 'fetchComments', 'addWorktime']),
 		dateAndTime(val) {
 			let dateAndTime = '';
 			if (!!val) {
@@ -120,7 +151,6 @@ export default {
 			}
 			return dateAndTime;
 		},
-
 		getDeclination(value, declinationsArr) {
 			let valueDeclination = '';
 			if (value % 10 === 1 && value % 100 !== 11) {
@@ -136,7 +166,6 @@ export default {
 			}
 			return valueDeclination;
 		},
-
 		getHoursAndMinutes(mins) {
 			let hours = Math.trunc(mins / 60);
 			let minutes = mins % 60;
@@ -145,22 +174,42 @@ export default {
 				this.hoursDeclinations
 			)} ${minutes} ${this.getDeclination(minutes, this.minutesDeclinations)}`;
 		},
-
 		setText(text) {
 			this.commentText = text;
 		},
-
 		submit(evt) {
 			this.addComment({
 				taskId: this.id,
-				userId: '6273dd46d09b551dca8762a9', // временно, пока нет логина
+				userId: localStorage.id,
 				text: this.commentText,
 			});
 			evt.target.reset();
 		},
-
 		modalToggle() {
 			this.isModalActive = !this.isModalActive;
+		},
+
+		setTime(val) {
+			this.modalData.timeInMinutes = val;
+		},
+
+		setUnit(val) {
+			if (val === 'hours') {
+				this.modalData.timeInMinutes = this.modalData.timeInMinutes * 60;
+			}
+		},
+
+		setComment(val) {
+			this.modalData.comment = val;
+		},
+
+		sendWorktime() {
+			this.addWorktime({
+				id: this.id,
+				data: this.modalData,
+			});
+			this.modalData.comment = '';
+			this.modalToggle();
 		},
 	},
 };

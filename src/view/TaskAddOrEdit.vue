@@ -2,24 +2,33 @@
 	<div>
 		<Header></Header>
 		<main class="center">
-			<Board isActive>
-				<template v-slot:top-content>
-					<h1 class="board-heading">
-						{{ id ? 'Редактирование' : 'Создание' }}
-					</h1>
-					<Button
-						class="btn-primary"
-						:text="id ? 'Сохранить' : 'Добавить'"
-						@click="sendTaskData"
-					></Button>
-				</template>
-				<template v-slot:main-content>
-					<TaskCardAddOrEdit
-						v-bind="taskObj"
-						@change="setTaskData"
-					></TaskCardAddOrEdit>
-				</template>
-			</Board>
+			<form @submit.prevent="sendTaskData">
+				<Board isActive>
+					<template v-slot:top-content>
+						<h1 class="board-heading">
+							{{ id ? 'Редактирование' : 'Создание' }}
+						</h1>
+						<div class="buttons-wrap">
+							<Button
+								class="btn-primary"
+								:text="id ? 'Сохранить' : 'Добавить'"
+								@click="redirect"
+							></Button>
+							<Button
+								class="btn-default"
+								text="Отмена"
+								@click="redirect"
+							></Button>
+						</div>
+					</template>
+					<template v-slot:main-content>
+						<TaskCardAddOrEdit
+							v-bind="taskObj"
+							@change="setTaskData"
+						></TaskCardAddOrEdit>
+					</template>
+				</Board>
+			</form>
 		</main>
 	</div>
 </template>
@@ -47,6 +56,11 @@ export default {
 		}
 	},
 
+	beforeRouteLeave(to, from, next) {
+		localStorage.removeItem('currentUser');
+		next();
+	},
+
 	computed: {
 		...mapGetters(['task']),
 
@@ -66,9 +80,20 @@ export default {
 			this.editTask(this.taskData);
 			this.$router.push(this.goToTasks);
 		},
+
+		redirect() {
+			this.$router.go(-1);
+		},
 	},
 };
 </script>
 ;
 
-<style></style>
+<style lang="scss" scoped>
+.buttons-wrap {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	flex-wrap: wrap;
+}
+</style>

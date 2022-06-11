@@ -1,15 +1,17 @@
 <template>
 	<div class="dropdown">
-		<button class="dropdown-btn">
+		<button v-if="isHeader" class="dropdown-header-btn">
+			<span>{{ authUser.username }}</span>
+			<UserImg
+				class="user-photo-header"
+				:photoUrl="authUser.photoUrl"
+				v-bind="$attrs"
+			></UserImg>
+		</button>
+		<button v-else class="dropdown-btn">
 			<span class="visually-hidden">Посмотреть возможные действия</span>
 		</button>
-		<div class="dropdown-list">
-			<!-- <div class='dropdown-item'>
-				<button class='dropdown-link'>Редактировать</button>
-			</div>
-			<div class='dropdown-item'>
-				<button class='dropdown-link dropdown-link-marked'>Удалить</button>
-			</div> -->
+		<div class="dropdown-list" :class="{ 'dropdown-list-header': isHeader }">
 			<slot></slot>
 		</div>
 	</div>
@@ -17,8 +19,10 @@
 
 <script>
 export default {
-	data() {
-		return {};
+	inheritAttrs: false,
+	props: {
+		isHeader: Boolean,
+		authUser: Object,
 	},
 };
 </script>
@@ -38,6 +42,17 @@ export default {
 			background-color: $default;
 			box-shadow: 0 5px 0 0 $default, 0 -5px 0 0 $default;
 		}
+	}
+
+	&-header-btn {
+		border: none;
+		background-color: transparent;
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		font-family: inherit;
+		font-size: inherit;
+		cursor: pointer;
 	}
 
 	&-btn {
