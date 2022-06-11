@@ -106,7 +106,7 @@ export default {
 	},
 
 	computed: {
-		...mapGetters(['user', 'tasksFilter', 'modalData1']),
+		...mapGetters(['user', 'tasksFilter']),
 
 		isAssignedUser() {
 			return this.id === localStorage.id;
