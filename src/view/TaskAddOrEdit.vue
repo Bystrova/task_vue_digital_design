@@ -12,11 +12,12 @@
 							<Button
 								class="btn-primary"
 								:text="id ? 'Сохранить' : 'Добавить'"
-								@click="redirect"
+								type="submit"
 							></Button>
 							<Button
 								class="btn-default"
 								text="Отмена"
+								type="button"
 								@click="redirect"
 							></Button>
 						</div>
@@ -35,8 +36,10 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import { trackPath } from '../mixins/trackPath';
 
 export default {
+	mixins: [trackPath],
 	data() {
 		return {
 			taskData: {},
@@ -73,12 +76,17 @@ export default {
 		...mapActions(['fetchTask', 'editTask']),
 
 		setTaskData(obj) {
+			this.isSaved = false;
 			this.taskData = obj;
 		},
 
 		sendTaskData() {
-			this.editTask(this.taskData);
-			this.$router.push(this.goToTasks);
+			this.isSaved = true;
+			if (!!Object.keys(this.taskData).length) {
+				this.editTask(this.taskData);
+			}
+			// this.$router.push(this.goToTasks);
+			this.$router.go(-1);
 		},
 
 		redirect() {

@@ -16,7 +16,13 @@
 			</router-link>
 		</div>
 		<div class="header-dropdown">
-			<Dropdown isHeader width="40" height="40" :authUser="authUser">
+			<Dropdown
+				v-if="!isLogin"
+				isHeader
+				width="40"
+				height="40"
+				:authUser="authUser"
+			>
 				<Button
 					class="btn-dropdown"
 					text="Посмотреть профиль"
