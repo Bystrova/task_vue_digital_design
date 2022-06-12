@@ -79,7 +79,6 @@ export default {
 				name: 'TaskEdit',
 			},
 			isModalActive: false,
-			test: '',
 			modalData: {
 				id: this.id,
 				login: '',
@@ -98,6 +97,12 @@ export default {
 	mounted() {
 		this.fetchUser(this.id);
 		this.test = this.user.username;
+	},
+
+	watch: {
+		id() {
+			this.fetchUser(this.id);
+		},
 	},
 
 	beforeRouteLeave(to, from, next) {

@@ -56,12 +56,12 @@ export default {
 		this.fetchTasks();
 	},
 
-	// watch: {
-	// 	id() {
-	// 		this.tasksFilter.filter.assignedUsers.push(this.id);
-	// 		this.fetchTasks();
-	// 	},
-	// },
+	watch: {
+		id() {
+			this.tasksFilter.filter.assignedUsers = [this.id];
+			this.fetchTasks();
+		},
+	},
 
 	computed: {
 		...mapGetters(['tasks', 'tasksFilter', 'total', 'limit']),

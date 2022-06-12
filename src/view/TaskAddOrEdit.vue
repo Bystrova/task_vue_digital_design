@@ -43,9 +43,6 @@ export default {
 	data() {
 		return {
 			taskData: {},
-			goToTasks: {
-				name: 'Tasks',
-			},
 		};
 	},
 
@@ -76,8 +73,8 @@ export default {
 		...mapActions(['fetchTask', 'editTask']),
 
 		setTaskData(obj) {
-			this.isSaved = false;
 			this.taskData = obj;
+			this.isSaved = false;
 		},
 
 		sendTaskData() {
@@ -85,7 +82,6 @@ export default {
 			if (!!Object.keys(this.taskData).length) {
 				this.editTask(this.taskData);
 			}
-			// this.$router.push(this.goToTasks);
 			this.$router.go(-1);
 		},
 
