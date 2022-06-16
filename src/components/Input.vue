@@ -9,6 +9,11 @@
 
 <script>
 export default {
+	data() {
+		return {
+			inputText: '',
+		};
+	},
 	props: {
 		text: String,
 	},
@@ -16,7 +21,8 @@ export default {
 	computed: {
 		setInputVal: {
 			get() {
-				return (this.inputText = this.text);
+				// return (this.inputText = this.text);
+				return this.text;
 			},
 			set(newVal) {
 				this.inputText = newVal;

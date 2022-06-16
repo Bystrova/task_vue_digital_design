@@ -13,11 +13,7 @@
 					<Filters></Filters>
 				</template>
 				<template v-slot:main-content>
-					<Task
-						v-for="task in tasks"
-						:key="task.id"
-						v-bind="{ ...task }"
-					></Task>
+					<Task v-for="task in tasks" :key="task.id" :task="task"></Task>
 				</template>
 				<template v-slot:paging>
 					<Paging

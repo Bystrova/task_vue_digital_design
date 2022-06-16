@@ -1,57 +1,69 @@
 <template>
-	<router-link :to="linkToTaskView" class="row-link">
-		<span class="task-type" :class="'task-type-' + type">
+	<div class="task-row">
+		<span class="task-type" :class="'task-type-' + task.type">
 			<span class="visually-hidden">Ошибка</span>
 		</span>
-		<span class="task-name">{{ title }}</span>
+		<router-link :to="linkToTaskView" class="task-name">{{
+			task.title
+		}}</router-link>
 		<span class="task-user" v-if="!userPage">{{ assignedUsername }}</span>
 		<div class="task-wrap">
-			<Status :class="'task-status-' + status" :statusText="statuses[status]">
+			<Status
+				:class="'task-status-' + task.status"
+				:statusText="statuses[task.status]"
+			>
 			</Status>
 		</div>
-		<div class="task-priority" :class="'task-priority-' + rank">
-			<Icon width="14" height="8" :name="rank"></Icon>
-			<span>{{ ranks[rank] }}</span>
+		<div class="task-priority" :class="'task-priority-' + task.rank">
+			<Icon width="14" height="8" :name="task.rank"></Icon>
+			<span>{{ ranks[task.rank] }}</span>
 		</div>
 		<div class="task-actions" v-if="!userPage">
 			<Dropdown>
-				<Button
-					class="btn-dropdown"
-					text="Редактировать"
-					@click.prevent="redirect"
-				></Button>
-				<Button
-					class="btn-dropdown btn-dropdown-marked"
-					text="Удалить"
-					@click.prevent="remove"
-				></Button>
-				<Button
-					v-if="isInProgress"
-					class="btn-dropdown"
-					:text="StatusActions.toTesting"
-					@click.prevent="newStatus(appStatuses.testing)"
-				></Button>
-				<Button
-					v-if="!isOpened"
-					class="btn-dropdown"
-					:text="StatusActions.reopen"
-					@click.prevent="newStatus(appStatuses.opened)"
-				></Button>
-				<Button
-					v-if="isOpened"
-					class="btn-dropdown"
-					:text="StatusActions.toWork"
-					@click.prevent="newStatus(appStatuses.inProgress)"
-				></Button>
-				<Button
-					v-if="!isComplete"
-					class="btn-dropdown"
-					:text="StatusActions.done"
-					@click.prevent="newStatus(appStatuses.complete)"
-				></Button>
+				<template v-slot:dropdown-btn>
+					<button class="dropdown-btn">
+						<span class="visually-hidden">Посмотреть возможные действия</span>
+					</button>
+				</template>
+				<template v-slot:dropdown-items>
+					<Button
+						class="btn-dropdown"
+						text="Редактировать"
+						@click.prevent="redirect"
+					></Button>
+					<Button
+						class="btn-dropdown btn-dropdown-marked"
+						text="Удалить"
+						@click.prevent="remove"
+					></Button>
+					<Button
+						v-if="isInProgress"
+						class="btn-dropdown"
+						:text="StatusActions.toTesting"
+						@click.prevent="newStatus(appStatuses.testing)"
+					></Button>
+					<Button
+						v-if="!isOpened"
+						class="btn-dropdown"
+						:text="StatusActions.reopen"
+						@click.prevent="newStatus(appStatuses.opened)"
+					></Button>
+					<Button
+						v-if="isOpened"
+						class="btn-dropdown"
+						:text="StatusActions.toWork"
+						@click.prevent="newStatus(appStatuses.inProgress)"
+					></Button>
+					<Button
+						v-if="!isComplete"
+						class="btn-dropdown"
+						:text="StatusActions.done"
+						@click.prevent="newStatus(appStatuses.complete)"
+					></Button>
+				</template>
 			</Dropdown>
 		</div>
-	</router-link>
+	</div>
 </template>
 
 <script>
@@ -69,14 +81,14 @@ export default {
 			linkToTaskView: {
 				name: 'TaskView',
 				params: {
-					id: this.id,
+					id: this.task.id,
 				},
 			},
 
 			addOrEdit: {
 				name: 'TaskEdit',
 				params: {
-					id: this.id,
+					id: this.task.id,
 				},
 			},
 
@@ -89,22 +101,17 @@ export default {
 	},
 
 	props: {
-		// task: Object,
-		id: String,
-		assignedId: String,
-		rank: String,
-		type: String,
-		status: String,
-		title: String,
+		task: Object,
 		userPage: Boolean,
 	},
 
 	computed: {
 		...mapGetters(['allUsers']),
+
 		assignedUsername() {
 			let assignedUsername = '';
 			const assignedUser = this.allUsers.find(
-				(user) => user.id === this.assignedId
+				(user) => user.id === this.task.assignedId
 			);
 			if (!!assignedUser) {
 				assignedUsername = assignedUser.username;
@@ -113,15 +120,15 @@ export default {
 		},
 
 		isInProgress() {
-			return this.status === this.appStatuses.inProgress;
+			return this.task.status === this.appStatuses.inProgress;
 		},
 
 		isOpened() {
-			return this.status === this.appStatuses.opened;
+			return this.task.status === this.appStatuses.opened;
 		},
 
 		isComplete() {
-			return this.status === this.appStatuses.complete;
+			return this.task.status === this.appStatuses.complete;
 		},
 	},
 
@@ -133,19 +140,19 @@ export default {
 		},
 
 		remove() {
-			this.deleteTask(this.id);
+			this.deleteTask(this.task.id);
 		},
 
 		newStatus(newVal) {
-			this.changeStatus({ id: this.id, val: this.appStatuses[newVal] });
+			this.changeStatus({ id: this.task.id, val: this.appStatuses[newVal] });
 		},
 	},
 };
 </script>
 
 <style lang="scss" scoped>
-.row-link {
-	color: inherit;
+.task-row {
+	// color: inherit;
 	display: block;
 	margin: 0;
 	padding: 20px 30px;
@@ -210,6 +217,7 @@ export default {
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
+		color: inherit;
 	}
 
 	&-user {

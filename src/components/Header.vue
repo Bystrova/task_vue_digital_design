@@ -16,23 +16,31 @@
 			</router-link>
 		</div>
 		<div class="header-dropdown">
-			<Dropdown
-				v-if="!isLogin"
-				isHeader
-				width="40"
-				height="40"
-				:authUser="authUser"
-			>
-				<Button
-					class="btn-dropdown"
-					text="Посмотреть профиль"
-					@click.prevent="redirect"
-				></Button>
-				<Button
-					class="btn-dropdown btn-dropdown-marked"
-					text="Выйти из системы"
-					@click.prevent="exit"
-				></Button>
+			<Dropdown v-if="!isLogin" width="40" height="40" isHeader>
+				<template v-slot:dropdown-btn>
+					<button class="dropdown-header-btn">
+						<span>{{ authUser.username }}</span>
+						<UserImg
+							class="user-photo-header"
+							:photoUrl="authUser.photoUrl"
+							width="42"
+							height="42"
+							v-bind="$attrs"
+						></UserImg>
+					</button>
+				</template>
+				<template v-slot:dropdown-items>
+					<Button
+						class="btn-dropdown"
+						text="Посмотреть профиль"
+						@click.prevent="redirect"
+					></Button>
+					<Button
+						class="btn-dropdown btn-dropdown-marked"
+						text="Выйти из системы"
+						@click.prevent="exit"
+					></Button>
+				</template>
 			</Dropdown>
 		</div>
 	</header>

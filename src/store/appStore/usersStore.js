@@ -85,18 +85,8 @@ export default {
 
 	actions: {
 
-		getLogin: ({commit, dispatch}, data) => {
-			api.Data.getLogin(data)
-			.then((res) => {
-				if(res.status === 200){
-					localStorage.id = res.data.id;
-					commit(mutation.SET_ERROR, false)
-				}
-			})
-			.catch((error) => {
-				commit(mutation.SET_ERROR_MESSAGE, error.data.message);
-				commit(mutation.SET_ERROR, true)
-			})
+		getLogin: ({}, data) => {
+			return	api.Data.getLogin(data)
 		},
 
 		// setLoading: ({ dispatch, commit }, value) => {

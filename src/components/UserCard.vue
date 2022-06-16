@@ -15,12 +15,7 @@
 		<div class="user-tasks">
 			<span class="label-text">Задачи</span>
 			<div class="board-inner">
-				<Task
-					v-for="task in tasks"
-					:key="task.id"
-					v-bind="{ ...task }"
-					userPage
-				></Task>
+				<Task v-for="task in tasks" :key="task.id" :task="task" userPage></Task>
 			</div>
 			<Paging
 				:total="total"

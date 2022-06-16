@@ -1,18 +1,8 @@
 <template>
 	<div class="dropdown">
-		<button v-if="isHeader" class="dropdown-header-btn">
-			<span>{{ authUser.username }}</span>
-			<UserImg
-				class="user-photo-header"
-				:photoUrl="authUser.photoUrl"
-				v-bind="$attrs"
-			></UserImg>
-		</button>
-		<button v-else class="dropdown-btn">
-			<span class="visually-hidden">Посмотреть возможные действия</span>
-		</button>
+		<slot name="dropdown-btn"></slot>
 		<div class="dropdown-list" :class="{ 'dropdown-list-header': isHeader }">
-			<slot></slot>
+			<slot name="dropdown-items"></slot>
 		</div>
 	</div>
 </template>
@@ -22,7 +12,6 @@ export default {
 	inheritAttrs: false,
 	props: {
 		isHeader: Boolean,
-		authUser: Object,
 	},
 };
 </script>

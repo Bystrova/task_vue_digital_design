@@ -9,7 +9,7 @@
 						placeholder="Введите логин"
 						required
 						@input="setUserLogin"
-						:class="{ 'form-input-error': error }"
+						:class="{ 'form-input-error': isError }"
 					></Input>
 				</label>
 				<label>
@@ -19,7 +19,7 @@
 						type="password"
 						required
 						@input="setPassword"
-						:class="{ 'form-input-error': error }"
+						:class="{ 'form-input-error': isError }"
 					></Input>
 				</label>
 				<span class="label-text-error">{{ errorMessage }}</span>
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions } from 'vuex';
 export default {
 	data() {
 		return {
@@ -39,20 +39,9 @@ export default {
 			goToTasks: {
 				name: 'Tasks',
 			},
+			errorMessage: '',
+			isError: null,
 		};
-	},
-
-	watch: {
-		error() {
-			if (!this.error) {
-				this.$router.push(this.goToTasks);
-				localStorage.password = this.password;
-			}
-		},
-	},
-
-	computed: {
-		...mapGetters(['errorMessage', 'error']),
 	},
 
 	methods: {
@@ -70,7 +59,18 @@ export default {
 			this.getLogin({
 				login: this.userLogin,
 				password: this.password,
-			});
+			})
+				.then((res) => {
+					if (res.status === 200) {
+						localStorage.id = res.data.id;
+						this.isError = false;
+						this.$router.push(this.goToTasks);
+					}
+				})
+				.catch((error) => {
+					this.errorMessage = error.data.message;
+					this.isError = true;
+				});
 		},
 	},
 };
