@@ -4,6 +4,8 @@ import Users from '../view/Users';
 import Error from '../view/Error';
 import TaskView from '../view/TaskView';
 import TaskAddOrEdit from '../view/TaskAddOrEdit';
+import Login from '../view/Login';
+import UserView from '../view/UserView';
 
 Vue.use(VueRouter);
 
@@ -26,39 +28,35 @@ const router = () => {
 			},
 
 			{
-				path: '/task/:id',
+				path: '/tasks/task/:id',
 				name: 'TaskView',
 				component: TaskView,
 				props: true,
 			},
 
 			{
-				path: '/task/edit',
-				name: 'TaskAdd',
+				path: '/tasks/edit/:id?',
+				name: 'TaskEdit',
 				component: TaskAddOrEdit,
 				props: true,
-				children: [
-					{
-						path: ':id',
-						name: 'TaskEdit',
-						component: TaskAddOrEdit,
-						props: true,
-					}
-				]
 			},
 			
 			{
-				path: '/user/:id',
-				name: 'User',
-				component: Error, //временно, пока нет User
+				path: '/users/user/:id',
+				name: 'UserView',
+				component: UserView,
 				props: true,
 			},
 
 			{
-				path: '/', redirect: {name: 'Tasks'}
-				// name: 'Tasks',
-				// component: Tasks,
-				// props: true,
+				path: '/login',
+				name: 'Login',
+				component: Login,
+				props: true,
+			},
+
+			{
+				path: '/', redirect: {name: 'Login'}
 			},
 
 			{

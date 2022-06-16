@@ -1,95 +1,139 @@
 <template>
-	<header class='header'>
-			<Logo></Logo>
-			<div class='header-tabs'>
-				<router-link 
-					:to='tasks' 
-					class='header-tabs-link' 
-					:class="{'link-active': isTasks}"
-					>Задачи
-				</router-link>
-				<router-link 
-					:to='users' 
-					class='header-tabs-link' 
-					:class="{'link-active': isUsers}"
-					>Пользователи
-				</router-link>
-			</div>
-			<div></div>
+	<header class="header">
+		<Logo class="logo-header"></Logo>
+		<div class="header-tabs" v-if="!isLogin">
+			<router-link
+				:to="tasks"
+				class="header-tabs-link"
+				active-class="link-active"
+				>Задачи
+			</router-link>
+			<router-link
+				:to="users"
+				class="header-tabs-link"
+				active-class="link-active"
+				>Пользователи
+			</router-link>
+		</div>
+		<div class="header-dropdown">
+			<Dropdown
+				v-if="!isLogin"
+				isHeader
+				width="40"
+				height="40"
+				:authUser="authUser"
+			>
+				<Button
+					class="btn-dropdown"
+					text="Посмотреть профиль"
+					@click.prevent="redirect"
+				></Button>
+				<Button
+					class="btn-dropdown btn-dropdown-marked"
+					text="Выйти из системы"
+					@click.prevent="exit"
+				></Button>
+			</Dropdown>
+		</div>
 	</header>
 </template>
 
 <script>
-
+import { mapGetters, mapActions } from 'vuex';
 export default {
-	data(){
+	data() {
 		return {
 			users: {
 				name: 'Users',
 			},
-
 			tasks: {
 				name: 'Tasks',
 			},
-		}
+
+			goToUser: {
+				name: 'UserView',
+				params: {
+					id: localStorage.id,
+				},
+			},
+
+			goToLogin: {
+				name: 'Login',
+			},
+		};
+	},
+	props: {
+		isLogin: Boolean,
+	},
+
+	mounted() {
+		this.fetchAuthUser(localStorage.id);
+	},
+
+	methods: {
+		...mapActions(['fetchAuthUser']),
+
+		redirect() {
+			this.$router.push(this.goToUser);
+		},
+
+		exit() {
+			localStorage.removeItem('id');
+			localStorage.removeItem('password');
+			this.$router.push(this.goToLogin);
+		},
 	},
 
 	computed: {
-		pageName(){
-			// return this.$route.name;
-			return this.$route.path;
-		},
+		...mapGetters(['authUser']),
+	},
+};
+</script>
 
-		isTasks(){
-			return this.pageName.includes('/task')
-		},
+<style lang="scss" scoped>
+.header {
+	background-color: $basic-white;
+	padding: 0 20px;
+	box-shadow: 0px 4px 4px rgba($basic-black, 0.25);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	min-height: 60px;
+	position: relative;
+}
 
-		isUsers(){
-			return this.pageName.includes('/user')
+.header-tabs {
+	font-family: $tabs-font;
+	font-size: 24px;
+	line-height: 33px;
+	display: flex;
+	// align-content: stretch;
+	justify-content: center;
+	height: 100%;
+	width: 33%;
+
+	&-link {
+		margin-right: 10px;
+		color: inherit;
+		text-decoration: none;
+		padding: 12px 0;
+		border-bottom: 2px solid transparent;
+
+		&:last-child {
+			margin-right: 0;
+		}
+
+		&:hover {
+			color: $primary;
 		}
 	}
 }
-</script>
 
+.header-dropdown {
+	width: 33%;
+}
 
-<style lang='scss' scoped>
-	.header {
-		background-color: $basic-white;
-		padding: 0 20px;
-		box-shadow: 0px 4px 4px rgba($basic-black, 0.25);
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		min-height: 60px;
-		position: relative;
-	}
-
-	.header-tabs {
-		font-family: $tabs-font;
-		font-size: 24px;
-		line-height: 33px;
-		display: flex;
-		align-content: stretch;
-		height: 100%;
-
-		&-link {
-			margin-right: 10px;
-			color: inherit;
-			text-decoration: none;
-			padding: 12px 0;
-			border-bottom: 2px solid transparent;
-
-			&:last-child {
-				margin-right: 0;
-			}
-
-			&:hover {
-				color: $primary;
-			}
-		}
-	}
-
-	.link-active {
-		border-bottom: 2px solid $primary;
-	}
+.link-active {
+	border-bottom: 2px solid $primary;
+}
 </style>

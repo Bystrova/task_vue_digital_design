@@ -1,29 +1,26 @@
 <template>
-	<router-link :to='linkToUser' class='row-link row-link-user'>
-		<div class='user-item'>{{user.username}}</div>
+	<router-link :to="linkToUser" class="row-link row-link-user">
+		<div class="user-item">{{ user.username }}</div>
 	</router-link>
 </template>
 
 <script>
-
 export default {
-	data(){
+	data() {
 		return {
 			linkToUser: {
-				name: 'User',
+				name: 'UserView',
 				params: {
-					id: this.user.id
-				}
-			}
-		}
+					id: this.user.id,
+				},
+			},
+		};
 	},
 
 	props: {
-		user: Object
-	}
-}
+		user: Object,
+	},
+};
 </script>
 
-<style lang='scss' scoped>
-
-</style>
+<style lang="scss" scoped></style>

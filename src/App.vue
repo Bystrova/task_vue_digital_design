@@ -7,27 +7,12 @@
 <script>
 
 export default {
-	data() {
-		return {
-			linkToGo: {
-				name: 'Tasks',
-			}
-		}
-	},
 
-	
-	computed: {
-
-	},
-	methods: {
-	
-	},
 }
 </script>
 
-<style lang='scss'>
+<style lang='scss' scoped>
 	@import '@/scss/_fonts';
-	@import '@/scss/_variables';
 	.app{
 		font-family: $main-font;
 	}

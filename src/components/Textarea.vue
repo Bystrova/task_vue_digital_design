@@ -1,16 +1,35 @@
 <template>
-	<textarea class='text-field' v-on='$listeners'></textarea>
+	<textarea class="text-field" v-model="setInputVal" v-autoHeight></textarea>
 </template>
 
 <script>
-
+import autoHeight from '../common/directives/autoHeight';
 export default {
-}
+	directives: {
+		autoHeight,
+	},
+
+	props: {
+		text: String,
+	},
+
+	computed: {
+		setInputVal: {
+			get() {
+				return this.text;
+			},
+			set(newVal) {
+				this.$emit('input', newVal);
+			},
+		},
+	},
+};
 </script>
 
-<style lang='scss' scoped>
-	.text-field {
+<style lang="scss" scoped>
+.text-field {
 	@include input-style;
+	@include scroll-style;
 
 	height: 76px;
 	overflow: auto;
@@ -26,7 +45,9 @@ export default {
 	}
 
 	&-description {
+		// height: 90px;
 		height: calc(100% - 92px);
+		// max-height: 510px;
 		font-size: 16px;
 		line-height: 19px;
 	}
