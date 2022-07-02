@@ -51,8 +51,8 @@ export default {
 	margin: 0 0 20px 0;
 
 	&-header {
-		width: 42px;
-		height: 42px;
+		width: 44px;
+		height: 44px;
 		margin: 0;
 	}
 

@@ -15,7 +15,14 @@
 		<div class="user-tasks">
 			<span class="label-text">Задачи</span>
 			<div class="board-inner">
-				<Task v-for="task in tasks" :key="task.id" :task="task" userPage></Task>
+				<Preloader v-if="isLoading"></Preloader>
+				<Task
+					v-for="task in tasks"
+					:key="task.id"
+					:task="task"
+					userPage
+					v-else
+				></Task>
 			</div>
 			<Paging
 				:total="total"
@@ -59,7 +66,7 @@ export default {
 	},
 
 	computed: {
-		...mapGetters(['tasks', 'tasksFilter', 'total', 'limit']),
+		...mapGetters(['tasks', 'tasksFilter', 'total', 'limit', 'isLoading']),
 
 		userPhoto() {
 			return this.photoUrl ? this.photoUrl : this.src;

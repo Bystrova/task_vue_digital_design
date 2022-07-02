@@ -13,7 +13,8 @@
 					<Filters></Filters>
 				</template>
 				<template v-slot:main-content>
-					<Task v-for="task in tasks" :key="task.id" :task="task"></Task>
+					<Preloader v-if="isLoading"></Preloader>
+					<Task v-for="task in tasks" :key="task.id" :task="task" v-else></Task>
 				</template>
 				<template v-slot:paging>
 					<Paging
@@ -39,19 +40,15 @@ export default {
 			},
 		};
 	},
-
 	mounted() {
 		this.fetchTasks();
 		this.fetchAllUsers();
 	},
-
 	computed: {
-		...mapGetters(['tasks', 'total', 'tasksFilter']),
+		...mapGetters(['tasks', 'total', 'tasksFilter', 'isLoading']),
 	},
-
 	methods: {
 		...mapActions(['fetchTasks', 'fetchAllUsers']),
-
 		setPage(val) {
 			this.tasksFilter.page = val;
 			this.fetchTasks();
