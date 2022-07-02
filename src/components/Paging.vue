@@ -1,25 +1,30 @@
 <template>
 	<div class="pagination">
-		<Button
-			class="btn-pagination"
-			:disabled="isFirstBtn"
-			text="Назад"
-			@click="getBack"
-		></Button>
-		<Button
-			class="btn-pagination"
-			:class="{ 'btn-primary': activePage === item }"
-			:text="item + 1"
-			:key="item"
-			v-for="item in getArr"
-			@click="setActivePage(item)"
-		></Button>
-		<Button
-			class="btn-pagination"
-			:disabled="isLastBtn"
-			text="Вперед"
-			@click="getForward"
-		></Button>
+		<div class="pagination-wrap">
+			<Button
+				class="btn-pagination"
+				:disabled="isFirstBtn"
+				text="Назад"
+				@click="getBack"
+			></Button>
+			<Button
+				class="btn-pagination"
+				:class="{ 'btn-primary': activePage === item }"
+				:text="item + 1"
+				:key="item"
+				v-for="item in getArr"
+				@click="setActivePage(item)"
+			></Button>
+			<Button
+				class="btn-pagination"
+				:disabled="isLastBtn"
+				text="Вперед"
+				@click="getForward"
+			></Button>
+		</div>
+		<p class="pagination-shown">
+			Показано {{ elementsFrom }} - {{ elementsTo }} из {{ total }}
+		</p>
 	</div>
 </template>
 
@@ -78,6 +83,16 @@ export default {
 			const emptyArr = new Array(btnQuantity);
 			return (this.arr = [...emptyArr.keys()]);
 		},
+
+		elementsFrom() {
+			return this.limit * this.activePage + 1;
+		},
+
+		elementsTo() {
+			return this.limit * this.activePage + this.limit <= this.total
+				? this.limit * this.activePage + this.limit
+				: this.total;
+		},
 	},
 };
 </script>
@@ -86,6 +101,18 @@ export default {
 .pagination {
 	display: flex;
 	align-items: center;
-	gap: 5px;
+	justify-content: space-between;
+
+	&-wrap {
+		display: flex;
+		align-items: center;
+		gap: 5px;
+	}
+
+	&-shown {
+		margin: 0;
+		padding: 0;
+		color: $inner-shadow;
+	}
 }
 </style>
